@@ -9,7 +9,8 @@ sql:
         out: "./db/sqlc"
         emit_json_tags: true
         emit_prepared_queries: false
-        emit_interface: false
+        # emit_interface的作用：创建接口使得所有查询方法都走这个接口而不是具体的数据库类型，可以使用模拟数据库而不是每次都需要连具体的数据库
+        emit_interface: true
         emit_exact_table_names: false
         emit_empty_slices: true
 

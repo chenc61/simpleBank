@@ -7,11 +7,11 @@ import (
 )
 
 type Server struct {
-	store  *db.Store
+	store  db.Store
 	router *gin.Engine
 }
 
-func NewServer(store *db.Store) *Server {
+func NewServer(store db.Store) *Server {
 	/*
 		为什么这块使用指针而不是直接传入对象：
 		1. 避免在函数见传递结构体时进行复制，也可以直接对结构体进行修改
