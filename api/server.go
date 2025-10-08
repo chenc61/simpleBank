@@ -4,6 +4,8 @@ import (
 	db "simplebank/db/sqlc"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
+	"github.com/go-playground/validator/v10"
 )
 
 type Server struct {
@@ -25,10 +27,17 @@ func NewServer(store db.Store) *Server {
 	*/
 	router := gin.Default()
 
+	// 这边(*validator.Validate)中是类型断言，因为本身gin框架获取到binding.Validator.Engine()默认验证引擎返回的是interface{}类型
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		v.RegisterValidation("currency", validCurrency)
+	}
+
 	// 注册路由： 将POST /accounts请求交给server.createAccount方法处理
 	router.POST("/accounts", server.createAccount)
 	router.GET("/accounts/:id", server.getAccount)
 	router.GET("/accounts", server.listAccount)
+
+	router.POST("/transfers", server.createTransfer)
 
 	server.router = router
 	return server
